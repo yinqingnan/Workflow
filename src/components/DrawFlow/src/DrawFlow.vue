@@ -321,6 +321,21 @@ export default {
       this.Currentnode.title = this.$refs.myInput.$el.value;
       this.nodeChange(this.Currentnode);
       this.isEdit = true;
+    },
+    conditionalRender(node) {
+      if (node.type === "1") {
+        if (node.content === "所有人") {
+          return <div>发起人node所有人</div>;
+        } else {
+          return <div>选择人</div>;
+        }
+      } else if (node.type === "2") {
+        return <div>审批人node</div>;
+      } else if (node.type === "4") {
+        return <div>抄送人node</div>;
+      } else {
+        return <div>条件</div>;
+      }
     }
   },
   destroyed() {
@@ -381,8 +396,7 @@ export default {
               </div>
             )}
           </div>
-
-          <h2>{this.Currentnode.content}</h2>
+          {this.conditionalRender(this.Currentnode)}
           <div class="drawer_btn">
             <a-button
               style="margin-right:10px"
