@@ -1,7 +1,7 @@
 <template>
   <div id="drawProcessDesign">
     <a-button @click="getData">提交</a-button>
-    <a-button @click="nodeChange">修改当前node</a-button>
+    <!-- <a-button @click="nodeChange">修改当前node</a-button> -->
     <FactoryDrawFlow
       @clickNode="clickNode"
       ref="flow"
