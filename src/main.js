@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @Autor: yqn
+ * @Date: 2021-07-20 17:50:57
+ * @LastEditTime: 2021-07-23 10:19:11
+ * @FilePath: \src\main.js
+ * @LastEditors: yqn
+ */
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";

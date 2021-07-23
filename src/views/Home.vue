@@ -1,7 +1,11 @@
 <template>
   <div id="drawProcessDesign">
-    <a-button @click="getData">提交</a-button>
-    <!-- <a-button @click="nodeChange">修改当前node</a-button> -->
+    <header>
+      <div>
+        <a-button @click="getData" type="primary">提交</a-button>
+      </div>
+      <!-- <a-button @click="nodeChange">修改当前node</a-button> -->
+    </header>
     <FactoryDrawFlow
       @clickNode="clickNode"
       ref="flow"
@@ -12,6 +16,17 @@
 <style lang="less" scoped>
 #drawProcessDesign {
   background: #f0f2f5;
+  header {
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid #e6e6e6;
+    button {
+      line-height: 1;
+      margin-right: 20px;
+      margin-top: 15px;
+    }
+  }
 }
 </style>
 
@@ -22,7 +37,7 @@ const arr = [
     groupId: null,
     pids: [null],
     groupPid: null,
-    childFlowIdx: "a8szgnpan,asci83q72,arfs6e27i,ay6xgxbbt",
+    // childFlowIdx: "a8szgnpan,asci83q72,arfs6e27i,ay6xgxbbt",
     type: "1",
     title: "发起人",
     members: [],
@@ -40,7 +55,7 @@ const arr = [
     groupId: "a78x4anxe",
     pids: ["a78x4anxe"],
     groupPid: "a8szgnpan,asci83q72,arfs6e27i,ay6xgxbbt",
-    childFlowIdx: "a8lm9tjxp",
+    // childFlowIdx: "a8lm9tjxp",
     type: "2",
     title: "审批人10",
     members: [
@@ -62,17 +77,17 @@ const arr = [
     data: {},
     cond: [],
     isParent: true
-  },
-  {
-    type: "4",
-    title: "抄送人",
-    content: "谢波",
-    groupId: "army6ys9q",
-    id: "apclw3nyvatbedgg",
-    isRow: true,
-    data: {},
-    pids: ["army6ys9q"]
   }
+  // {
+  //   type: "4",
+  //   title: "抄送人",
+  //   content: "谢波",
+  //   groupId: "army6ys9q",
+  //   id: "apclw3nyvatbedgg",
+  //   isRow: true,
+  //   data: {},
+  //   pids: ["army6ys9q"]
+  // }
 ];
 // @ is an alias to /src
 export default {
@@ -104,9 +119,9 @@ export default {
       console.log("这是返回的一维数组", JSON.stringify(res));
     },
     nodeChange() {
-      this.node.content = "谢老师";
-      this.node.title = "抄送";
-      this.$refs.flow.nodeChange(this.node);
+      // this.node.content = "谢老师";
+      // this.node.title = "抄送";
+      // this.$refs.flow.nodeChange(this.node);
     },
     /**
      * 1、创建一个row length 1
@@ -122,7 +137,7 @@ export default {
       setTimeout(() => {
         this.FlowConfig = arr;
         this.$forceUpdate(); //强制实例重新渲染操作
-      }, 1000);
+      });
     },
     clickNode(node) {
       this.node = node;

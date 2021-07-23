@@ -1,19 +1,6 @@
-<!--
-* @author 肖阳
-* @time 2020-9-10
-* @dec 生成流程绘制 基本节点(审批 抄送)组装逻辑
-*  组装
--->
-<!-- <template>
-  <div>
-    <h2>1111111</h2>
-  </div>
-</template> -->
 <script>
 import AddNodeBtn from "@/components/DrawFlow/src/components/AddNodeBtn";
 import RowFactory from "@/components/DrawFlow/src/components/DrawRow/FactoryRow";
-// import EventBus from "@/components/ApprovalProcess/ProcessDesign/components/EventBus/EventBus";
-
 import {
   RowNode,
   ConditionNode,
@@ -21,12 +8,14 @@ import {
 } from "./components/NodeConfigFactory/NodeFactory";
 import FlowFactory from "./components/factory";
 import { HashCode, transToTreeDat } from "./utils";
+import Tree from "./components/Tree/Tree.vue";
 import FlowNode from "@/components/DrawFlow/src/components/DrawRow/FlowNode";
 export default {
   name: "FactoryDrawFlow",
   components: {
     AddNodeBtn,
-    FlowNode
+    FlowNode,
+    Tree
   },
   created() {
     this.init();
@@ -48,6 +37,7 @@ export default {
       deep: true
     }
   },
+
   data() {
     return {
       visible: false,
@@ -63,7 +53,130 @@ export default {
       //缓存数据
       cacheData: null,
       Currentnode: {},
-      isEdit: true
+      isEdit: true,
+      ccpeople: true,
+      CC_model: false,
+      treeData: [
+        {
+          code: "D:123456789",
+          name: "245",
+          parentCode: "D:0000-0000-0000-0000",
+          children: null,
+          selected: false,
+          value: "123456789"
+        },
+        {
+          code: "D:a",
+          name: "平台2_一级部门A",
+          parentCode: "D:0000-0000-0000-0000",
+          children: [
+            {
+              code: "D:aa",
+              name: "平台2_二级部门A",
+              parentCode: "D:a",
+              children: [
+                {
+                  code: "D:aaa",
+                  name: "平台2_三级部门A",
+                  parentCode: "D:aa",
+                  children: [
+                    {
+                      code: "D:aaaa",
+                      name: "平台2_四级部门A",
+                      parentCode: "D:aaa",
+                      children: [
+                        {
+                          code: "D:aaaaa",
+                          name: "平台2_五级部门A",
+                          parentCode: "D:aaaa",
+                          children: null,
+                          selected: false,
+                          value: "aaaaa"
+                        },
+                        {
+                          code: "D:bbbbb",
+                          name: "平台2_五级部门B",
+                          parentCode: "D:aaaa",
+                          children: null,
+                          selected: false,
+                          value: "bbbbb"
+                        }
+                      ],
+                      selected: false,
+                      value: "aaaa"
+                    },
+                    {
+                      code: "D:bbbb",
+                      name: "平台2_四级部门B",
+                      parentCode: "D:aaa",
+                      children: null,
+                      selected: false,
+                      value: "bbbb"
+                    }
+                  ],
+                  selected: false,
+                  value: "aaa"
+                },
+                {
+                  code: "D:bbb",
+                  name: "平台2_三级部门B",
+                  parentCode: "D:aa",
+                  children: null,
+                  selected: false,
+                  value: "bbb"
+                }
+              ],
+              selected: false,
+              value: "aa"
+            },
+            {
+              code: "D:bb",
+              name: "平台2_二级部门B",
+              parentCode: "D:a",
+              children: null,
+              selected: false,
+              value: "bb"
+            }
+          ],
+          selected: false,
+          value: "a"
+        },
+        {
+          code: "D:b",
+          name: "平台2_一级部门B",
+          parentCode: "D:0000-0000-0000-0000",
+          children: null,
+          selected: false,
+          value: "b"
+        },
+        {
+          code: "D:LiBu",
+          name: "雷部",
+          parentCode: "D:0000-0000-0000-0000",
+          children: null,
+          selected: false,
+          value: "LiBu"
+        },
+        {
+          code: "D:SupplyTopA",
+          name: "支持采集站_一级部门A",
+          parentCode: "D:0000-0000-0000-0000",
+          children: null,
+          selected: false,
+          value: "SupplyTopA"
+        }
+      ],
+      roleData: [
+        {
+          id: "R:1",
+          name: "普通员工"
+        },
+        {
+          code: "R:2",
+          name: "部门经理"
+        }
+      ],
+      rolevalue: ""
     };
   },
   methods: {
@@ -322,15 +435,115 @@ export default {
       this.nodeChange(this.Currentnode);
       this.isEdit = true;
     },
+
+    handleOk() {
+      if (this.$refs.Tree.testingstate().checked.length) {
+        this.Currentnode.content = this.$refs.Tree.testingstate().checked[0];
+        this.nodeChange(this.Currentnode);
+      } else {
+        this.Currentnode.content = this.$refs.Tree.testingstate().selected[0];
+        this.nodeChange(this.Currentnode);
+      }
+      this.CC_model = false;
+      this.ccpeople = false;
+      this.rolevalue = "";
+    },
+    ccbtn() {
+      //选择发起人
+      this.CC_model = true;
+      this.$nextTick(() => {
+        this.$refs.Tree?.reset();
+      });
+      console.log("抄送人");
+    },
+    rolebtn() {
+      //选择角色
+      this.CC_model = true;
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
+    },
+    handleChange(e) {
+      this.rolevalue = e.target.innerHTML;
+      this.Currentnode.content = e.target.innerHTML;
+      this.nodeChange(this.Currentnode);
+      this.ccpeople = false;
+    },
     conditionalRender(node) {
-      if (node.type === "1") {
-        if (node.content === "所有人") {
-          return <div>发起人node所有人</div>;
-        } else {
-          return <div>选择人</div>;
-        }
-      } else if (node.type === "2") {
-        return <div>审批人node</div>;
+      if (node.type === "1" || node.type === "2") {
+        return (
+          <div>
+            <div class="ccheader">
+              <div>
+                <a-button
+                  type="primary"
+                  onClick={() => {
+                    this.ccbtn("person");
+                  }}
+                >
+                  <a-icon type="user-add" />
+                  选择人员&部门
+                </a-button>
+                <div style="margin:20px 0">
+                  <h3>选择角色</h3>
+                  <a-select
+                    show-search
+                    placeholder="请选择发起人角色"
+                    option-filter-prop="children"
+                    style="width: 200px"
+                    allowClear={true}
+                    value={this.rolevalue}
+                    filter-option={this.filterOption}
+                    onchange={() => {
+                      this.handleChange(event);
+                    }}
+                  >
+                    {this.roleData.map(item => {
+                      return (
+                        <a-select-option value={item.name}>
+                          {item.name}
+                        </a-select-option>
+                      );
+                    })}
+                  </a-select>
+                </div>
+              </div>
+              <a-modal
+                title="请选择部门或人员"
+                v-model={this.CC_model}
+                maskClosable={false}
+                keyboard={false}
+                cancelText="取消"
+                okText="确认"
+                onok={() => {
+                  this.handleOk();
+                }}
+              >
+                <div class="CC_Select">
+                  <div style="width:220px">
+                    <Tree treeData={this.treeData} ref="Tree" />
+                  </div>
+                  <div style="width:220px">
+                    <ul></ul>
+                  </div>
+                </div>
+              </a-modal>
+              <div>
+                {this.ccpeople ? (
+                  <div>
+                    <span>不指定则默认所有人都可发起此审批</span>
+                  </div>
+                ) : (
+                  <h2>{this.Currentnode.content}</h2>
+                )}
+              </div>
+            </div>
+          </div>
+        );
       } else if (node.type === "4") {
         return <div>抄送人node</div>;
       } else {
@@ -364,7 +577,7 @@ export default {
         </div>
         <a-drawer
           placement="right"
-          width="520"
+          width="480"
           class="my_drawer"
           closable={true}
           visible={this.visible}
@@ -381,7 +594,7 @@ export default {
                 }}
               >
                 <a-icon type="edit" />
-                {this.Currentnode.title}
+                {this.Currentnode?.title}
               </span>
             ) : (
               <div style="width:300px">
@@ -397,6 +610,7 @@ export default {
             )}
           </div>
           {this.conditionalRender(this.Currentnode)}
+          {/*
           <div class="drawer_btn">
             <a-button
               style="margin-right:10px"
@@ -408,6 +622,7 @@ export default {
             </a-button>
             <a-button type="primary">确认</a-button>
           </div>
+          */}
         </a-drawer>
       </div>
     );
@@ -494,5 +709,24 @@ export default {
   position: absolute;
   bottom: 0;
   right: 20px;
+  bottom: 20px;
+}
+
+.ccheader {
+  padding-top: 20px;
+  > div {
+    button {
+      margin-bottom: 20px;
+    }
+    span {
+      color: #1a91ff;
+    }
+  }
+}
+.CC_Select {
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>
