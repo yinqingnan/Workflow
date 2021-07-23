@@ -2,9 +2,9 @@
  * @Descripttion:
  * @Autor: yqn
  * @Date: 2021-07-20 17:50:57
- * @LastEditTime: 2021-07-21 14:35:10
+ * @LastEditTime: 2021-07-23 15:21:11
  * @FilePath: \src\components\DrawFlow\src\components\NodeConfigFactory\NodeFactory.js
- * @LastEditors: yqn
+ * @LastEditors: Please set LastEditors
  */
 /* eslint-disable no-unused-vars */
 /**
@@ -12,53 +12,53 @@
  * @time 2020-9-10
  * @dec 各种节点类
  */
-import { HashCode } from "../../utils";
+import { getUUID } from "../../utils";
 export class Node {
   nodeId;
-  type;
-  childNode;
-  title = "title";
+  nodeType;
+  nextNode;
+  nodeName = "title";
   content = "content";
-  conditionNodes;
-  constructor({ id, type, isRow }) {
-    if (type === "2") {
-      this.title = "审批人";
+  assignee = null;
+  candidateGroups = null;
+  branchNodes;
+  constructor({ id, nodeType, isRow }) {
+    if (nodeType === "userTask") {
+      this.nodeName = "审批人";
       this.content = "请设置审批人";
-    } else {
-      this.title = "抄送人";
+    } else if (nodeType === "serviceTask") {
+      this.nodeName = "抄送人";
       this.content = "请设置抄送人";
     }
     this.groupId = id;
-    this.id = HashCode();
-    this.type = type;
-
+    this.id = getUUID();
+    this.nodeType = nodeType;
     this.isRow = isRow;
   }
 }
 export class ConditionNode {
-  title = "条件";
-  data = {};
-  constructor({ groupId, type, id, isRow }) {
-    this.id = HashCode();
+  nodeName = "条件";
+  conditionExpression = null;
+  conditionGroups = [];
+  constructor({ groupId, nodeType, id, isRow }) {
+    this.id = getUUID();
     this.groupId = groupId;
-    this.type = type;
+    this.nodeType = nodeType;
     this.content = "请设置审批条件";
     this.groupPid = id;
     this.isRow = isRow;
   }
 }
 export class RowNode extends Node {
-  data = {};
-  constructor({ id, type, isRow, title }) {
-    super({ id, type, isRow, title });
+  constructor({ id, nodeType, isRow, nodeName }) {
+    super({ id, nodeType, isRow, nodeName });
   }
 }
 export class CopyNode {
-  title = "标题";
-  id = HashCode();
+  nodeName = "标题";
+  id = getUUID();
   content = "内容";
-  data = {};
-  constructor({ id, childNode, ...node }) {
+  constructor({ id, nextNode, ...node }) {
     return Object.assign(node, this);
   }
 }

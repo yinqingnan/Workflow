@@ -8,13 +8,13 @@ export default {
   name: "FlowNode",
   props: {
     nodeConfig: {
-      type: Object,
+      nodeType: Object,
       default() {
         return {
           pid: "root",
           id: "1",
-          type: "root", // 1:发起人 2：审批人 3 抄送人 4条件框
-          title: "所有人12",
+          nodeType: "root", // 1:发起人 2：审批人 3 抄送人 4条件框
+          nodeName: "所有人12",
           content: "内容2",
           isRow: true,
           data: {}
@@ -36,7 +36,7 @@ export default {
   },
 
   render() {
-    const { title, content, type } = this.nodeConfig;
+    const { nodeName, content, nodeType } = this.nodeConfig;
     return (
       <div
         onClick={() => {
@@ -45,9 +45,9 @@ export default {
         class="node-wrap-box node_sid-startevent start-node"
       >
         <div>
-          <div class={[type !== "1" ? "arrows" : "noArrows"]}>
-            <div class={[`node-type-${type}`, "title"]}>
-              <span class="edit-title">{title}</span>
+          <div class={[nodeType !== "startEvent" ? "arrows" : "noArrows"]}>
+            <div class={[`node-type-${nodeType}`, "title"]}>
+              <span class="edit-title">{nodeName}</span>
               <i
                 aria-label="icon: close"
                 tabindex="-1"
@@ -143,13 +143,13 @@ export default {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
   }
   //审批
-  .node-type-1 {
+  .node-type-startEvent {
     background: rgb(87, 106, 149);
   }
-  .node-type-2 {
+  .node-type-userTask {
     background: rgb(255, 148, 62);
   }
-  .node-type-4 {
+  .node-type-serviceTask {
     background: rgb(50, 150, 250);
   }
   .title {

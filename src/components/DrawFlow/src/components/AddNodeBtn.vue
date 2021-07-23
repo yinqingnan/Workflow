@@ -7,7 +7,7 @@ export default {
   },
   props: {
     belongToNode: {
-      type: Object,
+      nodeType: Object,
       default() {
         return {};
       }
@@ -24,6 +24,7 @@ export default {
       return el;
     },
     clickSelectBox(nextNode) {
+      console.log(nextNode)
       this.popoVisible = false;
       this.$emit("clickSelectBox", nextNode);
     }

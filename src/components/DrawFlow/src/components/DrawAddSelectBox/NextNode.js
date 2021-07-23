@@ -4,10 +4,10 @@
  * @dec 下一节点属性
  */
 export class NextNode {
-  constructor({ id, prevId, type, isRow }) {
+  constructor({ id, prevId, nodeType, isRow }) {
     this.id = id;
     this.prevId = prevId;
-    this.type = type;
+    this.nodeType = nodeType;
     this.isRow = isRow;
   }
 }

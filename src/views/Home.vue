@@ -31,51 +31,22 @@
 </style>
 
 <script>
+import {getUUID} from '../components/DrawFlow/src/utils'
 const arr = [
   {
-    id: "a78x4anxe",
+    id: getUUID(),
     groupId: null,
     pids: [null],
     groupPid: null,
     // childFlowIdx: "a8szgnpan,asci83q72,arfs6e27i,ay6xgxbbt",
-    type: "1",
-    title: "发起人",
-    members: [],
-    memberType: "None",
-    content: "所有人",
+    nodeType: "startEvent",
+    nodeName: "开始",
+    // members: [],
+    // memberType: "None",
+    content: "开始节点",
     approve: "None",
     isRow: true,
     isRoot: true,
-    data: {},
-    cond: [],
-    isParent: true
-  },
-  {
-    id: "army6ys9q",
-    groupId: "a78x4anxe",
-    pids: ["a78x4anxe"],
-    groupPid: "a8szgnpan,asci83q72,arfs6e27i,ay6xgxbbt",
-    // childFlowIdx: "a8lm9tjxp",
-    type: "2",
-    title: "审批人10",
-    members: [
-      {
-        sort: 1,
-        userId: 860,
-        username: "李廷鸿",
-        deptId: 0,
-        deptName: "",
-        roleId: 0,
-        roleName: ""
-      }
-    ],
-    memberType: "User",
-    content: "李廷鸿111",
-    approve: "OrderAllow",
-    isRow: true,
-    isRoot: false,
-    data: {},
-    cond: [],
     isParent: true
   }
   // {
@@ -98,11 +69,11 @@ export default {
       node: null,
       FlowConfig: [
         {
-          id: "root",
+          id: getUUID(),
           groupId: null,
-          type: "1",
-          title: "所有人",
-          content: "请选择",
+          nodeType: "startEvent",
+          nodeName: "开始",
+          content: "开始节点",
           isRow: true,
           isRoot: true,
           data: {}

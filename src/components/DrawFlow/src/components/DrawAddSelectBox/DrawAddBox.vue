@@ -2,9 +2,9 @@
  * @Descripttion: 
  * @Autor: yqn
  * @Date: 2021-07-20 17:50:57
- * @LastEditTime: 2021-07-21 16:47:25
+ * @LastEditTime: 2021-07-23 15:39:21
  * @FilePath: \src\components\DrawFlow\src\components\DrawAddSelectBox\DrawAddBox.vue
- * @LastEditors: yqn
+ * @LastEditors: Please set LastEditors
 -->
 
 <script>
@@ -15,7 +15,7 @@ export default {
   name: "AddBox",
   props: {
     nodeConfig: {
-      type: Object,
+      nodeType: Object,
       default() {
         return {};
       }
@@ -25,12 +25,12 @@ export default {
     return {
       boxArr: [
         {
-          type: "2",
+          nodeType: "userTask",
           value: "审批人",
           isRow: true,
           calssName: "approver",
           icon: "user"
-        }
+        },
         // {
         //   type: "4",
         //   value: "抄送人",
@@ -39,7 +39,7 @@ export default {
         //   icon: "highlight"
         // },
         // {
-        //   type: "3",
+        //   nodeType: "TJ",
         //   value: "条件分支",
         //   isRow: false,
         //   calssName: "route",
@@ -64,8 +64,8 @@ export default {
       if (item.value === "流转至") {
         this.nodeConfig.isFlowTo = true;
       }
-      let { id, prevId, type, isRow, title } = Object.assign(nodeConfig, item);
-      let nextNode = new NextNode({ id, prevId, type, isRow, title });
+      let { id, prevId, nodeType, isRow, nodeName } = Object.assign(nodeConfig, item);
+      let nextNode = new NextNode({ id, prevId, nodeType, isRow, nodeName });
       this.$emit("clickSelectBox", nextNode);
     },
     renderAddSBox() {

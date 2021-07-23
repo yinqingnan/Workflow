@@ -80,7 +80,7 @@ function conditionNodeRender(h, node) {
         >
           <div class="sort-left"></div>
           <div class="title-wrapper">
-            <span class="editable-title">{judegeNode.title}</span>
+            <span class="editable-title">{judegeNode.nodeName}</span>
             <i
               aria-label="icon: close"
               tabindex="-1"
@@ -88,29 +88,29 @@ function conditionNodeRender(h, node) {
             >
               <a-icon
                 type="close"
-                onClick={event => {
+                onClick={(event) => {
                   closeNode.bind(this, event, node)();
                 }}
               />
             </i>
-            <span class="priority-title">
-              {judegeNode.data.priority || "123"}
-            </span>
+            {/* <span class="priority-title">
+              {judegeNode.data.priority}
+            </span> */}
           </div>
           <div class="content">{judegeNode.content}</div>
         </div>
         <add-node-btn
           {...{
             props: { belongToNode: judegeNode },
-            on: { clickSelectBox: this.clickSelectBox }
+            on: { clickSelectBox: this.clickSelectBox },
           }}
         ></add-node-btn>
       </div>
     </div>
   );
 
-  if (node.childNode) {
-    let el = drawFlow.getFactory.bind(this, h, node.childNode)();
+  if (node.nextNode) {
+    let el = drawFlow.getFactory.bind(this, h, node.nextNode)();
     tep.push(el);
   }
   // let el = drawFlow.getFactory.bind(this, h, node)();

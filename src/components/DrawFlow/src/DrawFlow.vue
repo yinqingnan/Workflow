@@ -7,7 +7,7 @@ import {
   CopyNode
 } from "./components/NodeConfigFactory/NodeFactory";
 import FlowFactory from "./components/factory";
-import { HashCode, transToTreeDat } from "./utils";
+import { getUUID, transToTreeDat } from "./utils";
 import Tree from "./components/Tree/Tree.vue";
 import FlowNode from "@/components/DrawFlow/src/components/DrawRow/FlowNode";
 export default {
@@ -23,7 +23,7 @@ export default {
   },
   props: {
     FlowConfig: {
-      type: Array,
+      nodeType: Array,
       default() {
         return [];
       }
@@ -176,19 +176,35 @@ export default {
           name: "部门经理"
         }
       ],
-      rolevalue: ""
+      userData: [
+        {
+          code: "U:zhangsan",
+          name: "张三",
+          phone: "1333522547",
+          deptCode: "D:aa"
+        },
+        {
+          code: "U:lisi",
+          name: "李四",
+          phone: "1333522547",
+          deptCode: "D:aa"
+        }
+      ],
+      rolevalue: "",
+      num: null,
+      username: ""
     };
   },
   methods: {
     // 节点数据变化事件
     nodeChange(node) {
-      this.currentNode.title = node.title;
+      this.currentNode.nodeName = node.nodeName;
       this.currentNode.content = node.content;
       this.selfConfig.forEach(i => {
         if (i.id === this.currentNode.id) {
           i.data = node.data;
           i.content = node.content;
-          i.title = node.title;
+          i.nodeName = node.nodeName;
         }
       });
       //强制实例重新渲染操作
@@ -233,9 +249,7 @@ export default {
     },
     clickSelectBox(nextNode) {
       let { node, selfConfig } = this.getNodeFactory(nextNode);
-      console.log(node, nextNode);
       this.selfConfig = selfConfig.concat(node);
-      console.log(this.selfConfig);
     },
     /**
      * 根据isRow去判断row或者rol
@@ -263,7 +277,7 @@ export default {
      * 获取col节点
      */
     getColNode(nextNode) {
-      let groupId = HashCode();
+      let groupId = getUUID();
       let node = [
         new ConditionNode({ groupId, ...nextNode }),
         new ConditionNode({ groupId, ...nextNode })
@@ -312,7 +326,7 @@ export default {
     //点击关闭节点
     closeNode(node) {
       console.log(node);
-      if (node.type !== "1") {
+      if (node.nodeType !== "startEvent") {
         let repickConfig = {};
         if (node.isRow) {
           repickConfig.groupId = node.groupId;
@@ -409,14 +423,13 @@ export default {
     },
     //绘制body
     drawBody(h, node) {
-      if (node.childNode) {
-        return FlowFactory.getFactory.bind(this, h, node.childNode)();
+      if (node.nextNode) {
+        return FlowFactory.getFactory.bind(this, h, node.nextNode)();
       } else {
         return <div></div>;
       }
     },
     showDrawer(node) {
-      console.log(node);
       this.visible = true;
       this.Currentnode = node;
     },
@@ -427,7 +440,7 @@ export default {
       });
     },
     inputblur() {
-      this.Currentnode.title = this.$refs.myInput.$el.value;
+      this.Currentnode.nodeName = this.$refs.myInput.$el.value;
       this.nodeChange(this.Currentnode);
       this.isEdit = true;
     },
@@ -436,8 +449,10 @@ export default {
         this.Currentnode.content = this.$refs.Tree.testingstate().checked[0];
         this.nodeChange(this.Currentnode);
       } else {
-        this.Currentnode.content = this.$refs.Tree.testingstate().selected[0];
-        this.nodeChange(this.Currentnode);
+        if (this.username !== "") {
+          this.Currentnode.content = this.username;
+          this.nodeChange(this.Currentnode);
+        }
       }
       this.CC_model = false;
       this.ccpeople = false;
@@ -469,7 +484,7 @@ export default {
       this.ccpeople = false;
     },
     conditionalRender(node) {
-      if (node.type === "1" || node.type === "2") {
+      if (node.nodeType === "startEvent" || node.nodeType === "userTask") {
         return (
           <div>
             <div class="ccheader">
@@ -523,7 +538,25 @@ export default {
                     <Tree treeData={this.treeData} ref="Tree" />
                   </div>
                   <div style="width:220px">
-                    <ul></ul>
+                    <ul>
+                      {this.userData.map((item, index) => {
+                        return (
+                          <li
+                            class={[
+                              index === this.num ? "active" : "",
+                              "CC_Select_li"
+                            ]}
+                            onClick={() => {
+                              this.num = index;
+                              this.username = item.name;
+                              console.log(item.name);
+                            }}
+                          >
+                            {item.name}
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
                 </div>
               </a-modal>
@@ -539,7 +572,7 @@ export default {
             </div>
           </div>
         );
-      } else if (node.type === "4") {
+      } else if (node.nodeType === "serviceTask") {
         return <div>抄送人node</div>;
       } else {
         return <div>条件</div>;
@@ -584,6 +617,7 @@ export default {
           }}
         >
           <div>
+            {console.log(this.Currentnode)}
             {this.isEdit ? (
               <span
                 class="myspan"
@@ -592,12 +626,12 @@ export default {
                 }}
               >
                 <a-icon type="edit" />
-                {this.Currentnode?.title}
+                {this.Currentnode?.nodeName}
               </span>
             ) : (
               <div style="width:300px">
                 <a-input
-                  value={this.Currentnode?.title}
+                  value={this.Currentnode?.nodeName}
                   ref="myInput"
                   placeholder="请输入......."
                   onBlur={() => {
@@ -709,9 +743,17 @@ export default {
   }
 }
 .CC_Select {
-  div {
-    display: flex;
-    justify-content: space-between;
-  }
+  display: flex;
+  justify-content: space-between;
+}
+.active {
+  background: #1a91ff;
+  color: #fff;
+}
+.CC_Select_li {
+  list-style: none;
+  cursor: pointer;
+  line-height: 30px;
+  height: 30px;
 }
 </style>

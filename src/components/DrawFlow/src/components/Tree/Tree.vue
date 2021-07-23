@@ -2,7 +2,7 @@
  * @Descripttion: 
  * @Autor: yqn
  * @Date: 2021-07-22 17:14:33
- * @LastEditTime: 2021-07-22 18:26:05
+ * @LastEditTime: 2021-07-23 15:59:21
  * @FilePath: \src\components\DrawFlow\src\components\Tree\Tree.vue
  * @LastEditors: yqn
 -->
@@ -50,8 +50,6 @@ export default {
     },
     //检测选中的是部门还是部门下层
     testingstate() {
-      console.log(this.selected);
-      console.log(this.checked);
       return {
         selected: this.selected,
         checked: this.checked

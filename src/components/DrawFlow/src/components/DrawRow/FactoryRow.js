@@ -42,8 +42,8 @@ export default {
     if (nodeConfig.isRoot) {
       return tep;
     }
-    if (nodeConfig.childNode) {
-      let el = drawFlow.getFactory.bind(this, h, nodeConfig.childNode)();
+    if (nodeConfig.nextNode) {
+      let el = drawFlow.getFactory.bind(this, h, nodeConfig.nextNode)();
       tep.push(el);
     }
     return tep;

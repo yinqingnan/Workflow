@@ -40,11 +40,11 @@ export function getColNode(colNodeArrs) {
     let obj = {
       id: groupId,
       groupId: map[groupId][0].groupPid,
-      type: "route",
+      nodeType: "route",
       isRow: true,
       // TODO "流转至" 应单独写配置文件
-      isFlowTo: map[groupId][0].type === "6",
-      conditionNodes: map[groupId]
+      isFlowTo: map[groupId][0].nodeType === "6",
+      conditionNodes: map[groupId],
     };
     colNodesArr.push(obj);
   }
@@ -128,10 +128,10 @@ export function loopGetPidCol(parentRow, lis) {
  * @param {*} lis
  */
 export function loopGetPid(node, lis) {
-  if (node.childNode) {
-    loopGetPid(node.childNode, lis);
+  if (node.nextNode) {
+    loopGetPid(node.nextNode, lis);
   } else if (node.conditionNodes) {
-    node.conditionNodes.forEach(i => {
+    node.conditionNodes.forEach((i) => {
       loopGetPid(i, lis);
     });
   } else {
@@ -159,12 +159,12 @@ export function transTree(arr) {
       continue;
     }
     p.isParent = true;
-    p.childNode || (p.childNode = {});
-    p.childNode = lis;
+    p.nextNode || (p.nextNode = {});
+    p.nextNode = lis;
     if (
-      p.childNode.conditionNodes &&
+      p.nextNode.conditionNodes &&
       // TODO "流转至" 应单独写配置文件
-      p.childNode.conditionNodes[0].type === "6"
+      p.nextNode.conditionNodes[0].nodeType === "6"
     ) {
       p.isFlowTo = true;
     }
@@ -183,6 +183,19 @@ export function HashCode(hashLength) {
     ).join("")
   );
 }
+function S4() {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+}
+export function getUUID() {
+  return (
+    'sid-' + S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4()
+  );
+}
+
+
+
+
+
 /**
  * 树结构转化为扁平化结构
  */
