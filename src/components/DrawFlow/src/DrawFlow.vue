@@ -544,6 +544,9 @@ export default {
       } else {
         return <div>条件</div>;
       }
+    },
+    onClose() {
+      this.visible = false;
     }
   },
   destroyed() {
