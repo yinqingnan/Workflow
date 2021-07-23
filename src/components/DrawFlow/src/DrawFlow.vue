@@ -415,9 +415,6 @@ export default {
         return <div></div>;
       }
     },
-    onClose() {
-      this.visible = false;
-    },
     showDrawer(node) {
       console.log(node);
       this.visible = true;
@@ -425,7 +422,6 @@ export default {
     },
     editTitle() {
       this.isEdit = false;
-      // const input = this.$refs.myInput.refs.input;
       this.$nextTick(() => {
         this.$refs.myInput.focus();
       });
@@ -435,7 +431,6 @@ export default {
       this.nodeChange(this.Currentnode);
       this.isEdit = true;
     },
-
     handleOk() {
       if (this.$refs.Tree.testingstate().checked.length) {
         this.Currentnode.content = this.$refs.Tree.testingstate().checked[0];
@@ -610,19 +605,6 @@ export default {
             )}
           </div>
           {this.conditionalRender(this.Currentnode)}
-          {/*
-          <div class="drawer_btn">
-            <a-button
-              style="margin-right:10px"
-              onClick={() => {
-                this.onClose();
-              }}
-            >
-              取消
-            </a-button>
-            <a-button type="primary">确认</a-button>
-          </div>
-          */}
         </a-drawer>
       </div>
     );
