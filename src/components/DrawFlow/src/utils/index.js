@@ -44,7 +44,7 @@ export function getColNode(colNodeArrs) {
       isRow: true,
       // TODO "流转至" 应单独写配置文件
       isFlowTo: map[groupId][0].nodeType === "6",
-      conditionNodes: map[groupId],
+      conditionNodes: map[groupId]
     };
     colNodesArr.push(obj);
   }
@@ -131,7 +131,7 @@ export function loopGetPid(node, lis) {
   if (node.nextNode) {
     loopGetPid(node.nextNode, lis);
   } else if (node.conditionNodes) {
-    node.conditionNodes.forEach((i) => {
+    node.conditionNodes.forEach(i => {
       loopGetPid(i, lis);
     });
   } else {
@@ -188,17 +188,26 @@ function S4() {
 }
 export function getUUID() {
   return (
-    'sid-' + S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4()
+    "sid-" +
+    S4() +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    "-" +
+    S4() +
+    S4() +
+    S4()
   );
 }
-
-
-
-
 
 /**
  * 树结构转化为扁平化结构
  */
+
 export function deepTraversal(tree) {
   let list = [];
   tree.forEach(item => {

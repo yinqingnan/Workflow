@@ -31,7 +31,7 @@
 </style>
 
 <script>
-import {getUUID} from '../components/DrawFlow/src/utils'
+import { getUUID } from "../components/DrawFlow/src/utils";
 const arr = [
   {
     id: getUUID(),
@@ -49,16 +49,6 @@ const arr = [
     isRoot: true,
     isParent: true
   }
-  // {
-  //   type: "4",
-  //   title: "抄送人",
-  //   content: "谢波",
-  //   groupId: "army6ys9q",
-  //   id: "apclw3nyvatbedgg",
-  //   isRow: true,
-  //   data: {},
-  //   pids: ["army6ys9q"]
-  // }
 ];
 // @ is an alias to /src
 export default {

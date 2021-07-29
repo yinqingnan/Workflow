@@ -19,6 +19,7 @@ export default {
   },
   created() {
     this.init();
+    console.log(this.FlowConfig);
     // this.creatBusNodeChange();  // 可用事件派发
   },
   props: {
@@ -225,7 +226,7 @@ export default {
      */
     getResData() {
       let list = JSON.parse(JSON.stringify(this.selfConfig));
-      this.transformTree(list);
+      // this.transformTree(list);
       list.forEach(i => {
         if (i.isRow) {
           delete i.childNode;
